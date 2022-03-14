@@ -1,0 +1,9 @@
+name: BattleTravel
+version: ${project.version}
+main: com.jorianwoltjer.battletravel.BattleTravel
+api-version: 1.18
+commands:
+  battletravel:
+    aliases: [bt, runtimer]
+    description: Main command to communicate with Battle of Travel
+    permission: battletravel.command.battletravel

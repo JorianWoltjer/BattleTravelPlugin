@@ -6,6 +6,10 @@ You can watch the plugin in action in the [Battle of Travel playlist](https://ww
 
 ## Features
 
+**Commands**
+* Aliases: `/battletravel`, `/bt`, `/runtimer`
+* Supports tab-completion
+
 **Start of the game**
 * Teleport all players to the person executing the command
 * Shows a title that makes clear the game just started

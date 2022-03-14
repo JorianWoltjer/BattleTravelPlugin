@@ -4,6 +4,10 @@ Minecraft Plugin for the Battle of Travel game. The goal of the game is to move 
 Made for the Battle of Travel series on the [Gamende Ginger](https://www.youtube.com/channel/UCA05F236HZuPYrCMZlzbkgQ) YouTube channel (a friend of mine).  
 You can watch the plugin in action in the [Battle of Travel playlist](https://www.youtube.com/playlist?list=PLWfVxOe8YouRxj8sdQTtphrj6urjrT0Qe) on YouTube. 
 
+## Copyright
+
+**When using this plugin in ANY public video, credit this repository or the [Gamende Ginger](https://www.youtube.com/channel/UCA05F236HZuPYrCMZlzbkgQ) YouTube channel. On a YouTube video this could be as simple as putting a link in the description.**
+
 ## Features
 
 **Commands**

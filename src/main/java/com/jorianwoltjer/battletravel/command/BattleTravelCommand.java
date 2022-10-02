@@ -1,9 +1,9 @@
 package com.jorianwoltjer.battletravel.command;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.title.Title;
+import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -23,7 +23,9 @@ import org.bukkit.scheduler.BukkitTask;
 import com.jorianwoltjer.battletravel.BattleTravel;
 
 import static com.jorianwoltjer.battletravel.BattleTravel.plugin;
+
 import java.util.*;
+import java.util.List;
 
 public class BattleTravelCommand implements CommandExecutor, TabCompleter, Listener {
     static BukkitTask timer;
@@ -42,6 +44,7 @@ public class BattleTravelCommand implements CommandExecutor, TabCompleter, Liste
                     reset();
                 }
                 start = player.getLocation();
+                start.setYaw(180);
                 gameStarted = true;
                 Bukkit.getWorld("world").setTime(1000);
 
@@ -50,9 +53,13 @@ public class BattleTravelCommand implements CommandExecutor, TabCompleter, Liste
                 }
                 Bukkit.broadcastMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "Go " + ChatColor.GOLD + "" + ChatColor.BOLD + "North!");
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    p.sendTitle(ChatColor.YELLOW + "" + ChatColor.BOLD + "Go " + ChatColor.GOLD + "" + ChatColor.BOLD + "North!", "");
+                    sendTitle(p, ChatColor.YELLOW + "" + ChatColor.BOLD + "Go " + ChatColor.GOLD + "" + ChatColor.BOLD + "North!", "");
                     p.teleport(start);
 
+                    // Reset player
+                    p.setHealth(20);
+                    p.setSaturation(5);
+                    p.setFoodLevel(20);
                     p.getInventory().clear();
                     giveCompass(p);
                 }
@@ -81,7 +88,8 @@ public class BattleTravelCommand implements CommandExecutor, TabCompleter, Liste
                         } else if (i % 300 == 0) {
                             Bukkit.broadcastMessage(ChatColor.AQUA + "" + ChatColor.BOLD + secondsToString(i) + ChatColor.DARK_AQUA + " left");
                             for (Player p : Bukkit.getOnlinePlayers()) {
-                                p.sendTitle("", ChatColor.AQUA + "" + ChatColor.BOLD + secondsToString(i) + ChatColor.DARK_AQUA + " left");
+                                sendTitle(p, "", ChatColor.AQUA + "" + ChatColor.BOLD + secondsToString(i) + ChatColor.DARK_AQUA + " left");
+                                p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10, 1);
                             }
                             Bukkit.broadcastMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "Current standings:");
                             sendStandings();
@@ -145,6 +153,13 @@ public class BattleTravelCommand implements CommandExecutor, TabCompleter, Liste
         return false;
     }
 
+    private void sendTitle(Player player, String title, String subtitle) {
+        Component titleComponent = Component.text(title);
+        Component subtitleComponent = Component.text(subtitle);
+        Title timeTitle = Title.title(titleComponent, subtitleComponent);
+        player.showTitle(timeTitle);
+    }
+
     private void giveCompass(Player p) {
         ItemStack compass = new ItemStack(Material.COMPASS);
         ItemMeta compassMeta = compass.getItemMeta();
@@ -167,8 +182,8 @@ public class BattleTravelCommand implements CommandExecutor, TabCompleter, Liste
             Bukkit.broadcastMessage(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "Final standings:");
             sendStandings();
             // Display winner
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                player.sendTitle(ChatColor.GOLD + "" + ChatColor.BOLD + "Game Over!",
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                sendTitle(p, ChatColor.GOLD + "" + ChatColor.BOLD + "Game Over!",
                         ChatColor.GOLD + "" + ChatColor.BOLD + getWinner() + ChatColor.YELLOW + ChatColor.BOLD + " has won the game!");
             }
             gameStarted = false;

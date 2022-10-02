@@ -2,11 +2,13 @@ package com.jorianwoltjer.battletravel;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -32,11 +34,11 @@ public class CompassTracker implements Listener {
     }
 
     public static Player getClosestPlayer(Player p) {
-        Player bestPlayer = null;
+        Player bestPlayer = p;
         double bestDistance = Float.POSITIVE_INFINITY;
 
         for (Player p2 : Bukkit.getOnlinePlayers()) {
-            if (p2 != p) {
+            if (p2 != p && p2.getGameMode() != GameMode.SPECTATOR) {
                 double d = distance(p, p2);
                 if (d < bestDistance) {
                     bestDistance = d;
@@ -71,7 +73,7 @@ public class CompassTracker implements Listener {
         menu.addItem(closestItem);
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p != targetPlayer) {
+            if (p != targetPlayer && p.getGameMode() != GameMode.SPECTATOR) {
                 ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
                 SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
                 skullMeta.setOwningPlayer(p);
